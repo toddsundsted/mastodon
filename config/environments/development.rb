@@ -17,9 +17,7 @@ Rails.application.configure do
     config.action_controller.perform_caching = true
 
     config.cache_store = :redis_store, {
-      host: ENV['REDIS_HOST'] || 'localhost',
-      port: ENV['REDIS_PORT'] || 6379,
-      db: 0,
+      url: ENV['REDIS_URL'],
       namespace: 'cache',
       expires_in: 1.minute,
     }

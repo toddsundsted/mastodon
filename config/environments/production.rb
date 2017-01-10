@@ -48,21 +48,9 @@ Rails.application.configure do
   # Use a different logger for distributed setups.
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
-  # Parse and split the REDIS_URL if passed (used with hosting platforms such as Heroku).
-  # Set ENV variables because they are used elsewhere.
-  if ENV['REDIS_URL']
-    redis_url = URI.parse(ENV['REDIS_URL'])
-    ENV['REDIS_HOST'] = redis_url.host
-    ENV['REDIS_PORT'] = redis_url.port.to_s
-    ENV['REDIS_PASSWORD'] = redis_url.password
-  end
-
   # Use a different cache store in production.
   config.cache_store = :redis_store, {
-    host: ENV.fetch('REDIS_HOST') { 'localhost' },
-    port: ENV.fetch('REDIS_PORT') { 6379 },
-    password: ENV.fetch('REDIS_PASSWORD') { false },
-    db: 0,
+    url: ENV['REDIS_URL'],
     namespace: 'cache',
     expires_in: 20.minutes,
   }
