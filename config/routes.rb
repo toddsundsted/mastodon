@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   get '.well-known/host-meta', to: 'xrd#host_meta', as: :host_meta
   get '.well-known/webfinger', to: 'xrd#webfinger', as: :webfinger
 
+  get '.well-known/acme-challenge/:id' => 'lets_encrypt#challenge'
+
   devise_for :users, path: 'auth', controllers: {
     sessions:           'auth/sessions',
     passwords:          'auth/passwords',
