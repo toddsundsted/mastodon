@@ -19,10 +19,14 @@ Rails.application.routes.draw do
 
   devise_for :users, path: 'auth', controllers: {
     sessions:           'auth/sessions',
-    registrations:      'auth/registrations',
     passwords:          'auth/passwords',
     confirmations:      'auth/confirmations',
   }
+
+  as :user do
+    get 'users/edit' => 'devise/registrations#edit', :as => 'edit_user_registration'
+    put 'users' => 'devise/registrations#update', :as => 'user_registration'
+  end
 
   resources :accounts, path: 'users', only: [:show], param: :username do
     resources :stream_entries, path: 'updates', only: [:show] do

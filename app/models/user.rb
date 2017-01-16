@@ -3,8 +3,7 @@
 class User < ApplicationRecord
   include Settings::Extend
 
-  devise :registerable, :recoverable,
-         :rememberable, :trackable, :validatable, :confirmable,
+  devise :recoverable, :rememberable, :trackable, :validatable, :confirmable,
          :two_factor_authenticatable, otp_secret_encryption_key: ENV['OTP_SECRET']
 
   belongs_to :account, inverse_of: :user
