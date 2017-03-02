@@ -14,27 +14,21 @@ dotenv.config({
   path: env === 'production' ? '.env.production' : '.env'
 })
 
-const pgConfigs = {
-  development: {
-    database: 'mastodon_development',
-    host:     '/var/run/postgresql',
-    max:      10
-  },
-
-  production: {
-    user:     process.env.DB_USER || 'mastodon',
-    password: process.env.DB_PASS || '',
-    database: process.env.DB_NAME || 'mastodon_production',
-    host:     process.env.DB_HOST || 'localhost',
-    port:     process.env.DB_PORT || 5432,
-    max:      10
-  }
-}
-
 const app    = express()
-const pgPool = new pg.Pool(pgConfigs[env])
 const server = http.createServer(app)
 const wss    = new WebSocket.Server({ server })
+
+const params = url.parse(process.env.DATABASE_URL)
+const auth = params.auth.split(':')
+
+const pgPool = new pg.Pool({
+  user:     auth[0],
+  password: auth[1],
+  database: params.pathname.split('/')[1],
+  host:     params.hostname,
+  port:     params.port,
+  max:      10
+})
 
 const redisClient = redis.createClient({
   url: process.env.REDIS_URL
